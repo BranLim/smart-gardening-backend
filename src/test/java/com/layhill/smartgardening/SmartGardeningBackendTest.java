@@ -19,21 +19,10 @@ public class SmartGardeningBackendTest {
     @Inject
     EmbeddedApplication<?> application;
 
-    @Inject
-    @Client("/")
-    private RxHttpClient client;
 
     @Test
     void testItWorks() {
         Assertions.assertTrue(application.isRunning());
     }
 
-    @Test
-    void testShouldReturn200WhenReceivedValidTelemetry()
-    {
-        TelemetryDTO telemetry = new TelemetryDTO("Plant 1", 800);
-        HttpRequest<TelemetryDTO> request = POST("/api/monitoring",telemetry);
-        HttpResponse response = client.toBlocking().exchange(request);
-        assertThat(response.code()).isEqualTo(200);
-    }
 }
