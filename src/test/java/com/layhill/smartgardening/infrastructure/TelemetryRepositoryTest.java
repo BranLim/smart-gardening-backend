@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import javax.inject.Inject;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +29,7 @@ public class TelemetryRepositoryTest {
     void testAddTelemetryRecord() {
 
         when(telemetryRepository.nextId()).thenReturn("363b5ee1-27a9-4b77-ab1e-f53a858a2f66");
+
         String id = telemetryRepository.nextId();
         Telemetry telemetry = new Telemetry(id, "Plant 1", 800);
         telemetryRepository.add(telemetry);
@@ -38,13 +40,16 @@ public class TelemetryRepositoryTest {
     @Test
     void testRecordExistsWhenTelemetryAdded() {
         when(telemetryRepository.nextId()).thenReturn("363b5ee1-27a9-4b77-ab1e-f53a858a2f66");
-        when(telemetryRepository.findById("363b5ee1-27a9-4b77-ab1e-f53a858a2f66")).thenReturn(new Telemetry("363b5ee1-27a9-4b77-ab1e-f53a858a2f66", "Plant 1", 800));
+        when(telemetryRepository.findById("363b5ee1-27a9-4b77-ab1e-f53a858a2f66")).thenReturn(Optional.of(new Telemetry("363b5ee1-27a9-4b77-ab1e-f53a858a2f66", "Plant 1", 800)));
+
         String id = telemetryRepository.nextId();
         Telemetry telemetry = new Telemetry(id, "Plant 1", 800);
         telemetryRepository.add(telemetry);
-        Telemetry found = telemetryRepository.findById("363b5ee1-27a9-4b77-ab1e-f53a858a2f66");
+        Optional<Telemetry> found = telemetryRepository.findById("363b5ee1-27a9-4b77-ab1e-f53a858a2f66");
+
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo("Plant 1");
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getName()).isEqualTo("Plant 1");
     }
 
     @Primary

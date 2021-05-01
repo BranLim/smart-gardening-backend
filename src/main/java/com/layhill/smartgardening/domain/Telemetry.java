@@ -1,15 +1,19 @@
 package com.layhill.smartgardening.domain;
 
+import java.time.LocalDate;
+
 public class Telemetry {
 
     private String id;
     private String name;
     private int moistureLevel;
+    private LocalDate receivedTime;
 
     public Telemetry(String id, String name, int moistureLevel) {
         this.id = id;
         this.name = name;
         this.moistureLevel = moistureLevel;
+        receivedTime = LocalDate.now();
     }
 
     public String getId() {
@@ -20,7 +24,11 @@ public class Telemetry {
         return name;
     }
 
-    public int moistureLevel() {
+    public int getMoistureLevel() {
         return moistureLevel;
+    }
+
+    public LocalDate getReceivedTime(){
+        return receivedTime;
     }
 }

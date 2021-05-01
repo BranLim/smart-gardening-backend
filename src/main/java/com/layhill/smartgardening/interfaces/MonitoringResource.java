@@ -1,5 +1,6 @@
 package com.layhill.smartgardening.interfaces;
 
+import com.layhill.smartgardening.domain.Telemetry;
 import com.layhill.smartgardening.domain.TelemetryRepository;
 import com.layhill.smartgardening.interfaces.dto.TelemetryDTO;
 import io.micronaut.core.util.StringUtils;
@@ -21,14 +22,14 @@ public class MonitoringResource {
 
     @Post("/monitoring")
     @Consumes(MediaType.APPLICATION_JSON)
-    public HttpResponse telemetry(@Body TelemetryDTO telemetry) {
+    public HttpResponse telemetry(@Body TelemetryDTO aTelemetry) {
 
-        if (telemetry.getPlantName()==null || StringUtils.isEmpty(telemetry.getPlantName()))
-        {
+        if (aTelemetry.getPlantName() == null || StringUtils.isEmpty(aTelemetry.getPlantName())) {
             return HttpResponse.badRequest();
         }
 
-        
+        Telemetry telemetry = new Telemetry(telemetryRepository.nextId(), aTelemetry.getPlantName(), aTelemetry.getMoistureLevel());
+        telemetryRepository.add(telemetry);
 
         return HttpResponse.ok();
     }
