@@ -29,7 +29,6 @@ public class TelemetryRepositoryTest {
     void testAddTelemetryRecord() {
 
         when(telemetryRepository.nextId()).thenReturn("363b5ee1-27a9-4b77-ab1e-f53a858a2f66");
-
         String id = telemetryRepository.nextId();
         Telemetry telemetry = new Telemetry(id, "Plant 1", 800);
         telemetryRepository.add(telemetry);
@@ -53,7 +52,7 @@ public class TelemetryRepositoryTest {
     }
 
     @Primary
-    @MockBean(MockTelemetryRepository.class)
+    @MockBean(TelemetryRepository.class)
     TelemetryRepository telemetryRepository() {
         return mock(TelemetryRepository.class);
     }

@@ -2,33 +2,41 @@ package com.layhill.smartgardening.infrastructure;
 
 import com.layhill.smartgardening.domain.Telemetry;
 import com.layhill.smartgardening.domain.TelemetryRepository;
-import io.micronaut.context.annotation.Executable;
 
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.inject.Singleton;
-import javax.persistence.GeneratedValue;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
+import java.util.UUID;
 
-@Singleton
 @Repository
-public interface JpaTelemetryRepository extends TelemetryRepository, CrudRepository<Telemetry, String> {
+@Singleton
+public class JpaTelemetryRepository implements TelemetryRepository {
+
+    private UUID idGenerator = UUID.randomUUID();
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
+    public JpaTelemetryRepository() {
+
+    }
 
     @Override
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid")
-    String nextId();
+    public void add(Telemetry telemetry) {
+        entityManager.persist(telemetry);
+    }
 
-    @Executable
     @Override
-    void add(Telemetry telemetry);
+    public String nextId() {
+        return idGenerator.toString();
+    }
 
-    @Executable
     @Override
-    Optional<Telemetry> findById(String id);
-
-
-
+    public Optional<Telemetry> findById(String id) {
+        return Optional.ofNullable(entityManager.find(Telemetry.class, id));
+    }
 }
