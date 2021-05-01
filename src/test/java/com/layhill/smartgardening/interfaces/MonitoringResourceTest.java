@@ -41,7 +41,6 @@ public class MonitoringResourceTest {
             HttpResponse response = client.toBlocking().exchange(request);
         }).isInstanceOf(HttpClientResponseException.class);
 
-        //assertThat(response.code()).isEqualTo(400);
     }
 
 
